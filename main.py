@@ -4,14 +4,12 @@ import requests
 
 user_date = input(
     "What date would you lke the top 100 songs for? (YYYY-MM-DD): ")
-url = "https://billboard.com/charts/hot-100/"
 
-response = requests.get(url + user_date)
+response = requests.get("https://billboard.com/charts/hot-100/" + user_date)
 
-page_text = response.text
-soup = BeautifulSoup(page_text, "html.parser")
+soup = BeautifulSoup(response.text, "html.parser")
 
-title_elements = soup.select("l1 h3")
-titles_list = [title.getText() for title in title_elements]
+titles_list = [title.getText().strip("\n")
+               for title in soup.select("li h3")][:100]
 
 print(titles_list)
